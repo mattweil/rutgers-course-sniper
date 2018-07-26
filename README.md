@@ -8,6 +8,8 @@ Rutgers Course Sniper is a command line project written in Java that allows you 
 
 | Command | Description | Usage | Optional Parameters
 | --- | --- | --- | ---
-| `sectionsnipe` | Begins watching the provided section within a course | sectionsnipe [sectionindex] | -a
-| `coursesnipe` | Begins watching all sections within a course  | coursesnipe [courseindex] | -p
+| `snipesection` | Begins watching the provided section within a course | snipesection [sectionindex] | -a, -e
+| `snipesections` | Begins watching the provided sections within a course | snipesections [sectionindex, sectionindex] | -a, -e
+| `snipecourse` | Begins watching all sections within a provided course  | snipecourse [courseindex] | -p, -e
+| `snipecourses` | Begins watching all sections within provided courses  | snipecourses [courseindex, courseindex] | -e
 | `help` | Displays a list of commands and their usage | help [command] | 
