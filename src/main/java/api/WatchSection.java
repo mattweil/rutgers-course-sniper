@@ -1,6 +1,6 @@
 package api;
 
-public class WatchCourse {
+public class WatchSection {
     String id;
     Boolean auto;
     Boolean emailNotify;

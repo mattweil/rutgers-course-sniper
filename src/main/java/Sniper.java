@@ -1,6 +1,6 @@
 import api.Course;
 import api.Request;
-import api.WatchCourse;
+import api.WatchSection;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class Sniper implements Runnable {
 
-    public static ArrayList<WatchCourse> watchList = new ArrayList();
+    public static ArrayList<WatchSection> watchList = new ArrayList();
     public static ArrayList<Course> courseList = new ArrayList<Course>();
     public static Boolean running;
 
@@ -42,14 +42,13 @@ public class Sniper implements Runnable {
     }
 
     public void run() {
+
         running = true;
+
         while (running == true) {
-            //System.out.println(watchList.size());
-
-
         for (int i = 0; i < watchList.size(); i++) {
             int[] watchArray = new int[watchList.size()];
-            WatchCourse w = watchList.get(i);
+            WatchSection w = watchList.get(i);
             System.out.println(i);
             watchArray[i] = Integer.parseInt(w.getId());
             String bulkData = null;
@@ -60,17 +59,19 @@ public class Sniper implements Runnable {
             }
             int[] courseIndexes = Arrays.stream(StringUtils.substringsBetween(bulkData, "\"", "\"")).mapToInt(Integer::parseInt).toArray();
             System.out.println(bulkData);
-            for (int x : watchArray) { //wlist = user courses we are sniping
+            for (int x : watchArray) {
                 if (bSearch(courseIndexes, x) == true) {
                     System.out.println(x + " OPEN");
+                    //ACTION TO BE TAKEN AFTER SECTION IS OPEN BELOW
                     System.err.println(w.getId());
                     System.err.println(w.getAuto());
                 } else {
+                    //ACTION TO BE TAKEN IF SECTION IS NOT OPEN
                     System.out.println(x + " not open");
                 }
             }
             try {
-                Thread.sleep(10000);
+                Thread.sleep(Configuration.refreshRate);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

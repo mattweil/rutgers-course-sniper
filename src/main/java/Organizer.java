@@ -10,11 +10,21 @@ public class Organizer {
         ArrayList<Course> clist = new ArrayList<Course>();
         String[] rawCourses = StringUtils.substringsBetween(data, "\"campusLocations\":", "courseNotes");
         for (String r: rawCourses) {
-           // System.out.println(r);
+            ArrayList<String> slist = new ArrayList<>();
+            System.out.println(r);
             Course c = new Course();
 
             c.setCourseTitle(StringUtils.substringBetween(r, "title\":\"", "\","));
             c.setCourseString(StringUtils.substringBetween(r, "courseString\":\"", "\","));
+            String[] sectionIndexes = StringUtils.substringsBetween(r, "\"index\":\"", "\",\"");
+
+            for (String i : sectionIndexes) {
+                System.out.println(c.getCourseTitle());
+                System.out.println(i);
+                slist.add(i);
+            }
+
+            c.setSectionIndexes(slist);
 
 
             Sniper.courseList.add(c);
