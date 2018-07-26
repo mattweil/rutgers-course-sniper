@@ -1,14 +1,18 @@
 import api.Course;
 import api.Request;
+import api.WatchCourse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Sniper {
+public class Sniper implements Runnable {
 
+    public static ArrayList<WatchCourse> watchList = new ArrayList();
     public static ArrayList<Course> courseList = new ArrayList<Course>();
+    public static Boolean running;
+
 
     static class BinarySearch {
         // Returns index of x if it is present in arr[],
@@ -22,7 +26,7 @@ public class Sniper {
                 if (arr[m] == x)
                     return m;
 
-                // If x greater, ignore left half
+                // If x greater, ignore left halfs
                 if (arr[m] < x)
                     l = m + 1;
 
@@ -37,37 +41,48 @@ public class Sniper {
         }
     }
 
-    public static void start() throws IOException {
-        int[] watchList = grabWatchList();
-        String bulkData = Request.get("openSections.gz?year=2018&term=7&campus=NB");
-        int[] courseIndexes = Arrays.stream(StringUtils.substringsBetween(bulkData, "\"", "\"")).mapToInt(Integer::parseInt).toArray();
-        System.out.println(bulkData);
-        for (int i: watchList) { //wlist = user courses we are sniping
-            if(bSearch(courseIndexes, i) == true){
-                System.out.println(i + " OPEN");
-            } else {
-                System.out.println(i + " not open");
+    public void run() {
+        running = true;
+        while (running == true) {
+            //System.out.println(watchList.size());
+
+
+        for (int i = 0; i < watchList.size(); i++) {
+            int[] watchArray = new int[watchList.size()];
+            WatchCourse w = watchList.get(i);
+            System.out.println(i);
+            watchArray[i] = Integer.parseInt(w.getId());
+            String bulkData = null;
+            try {
+                bulkData = Request.get("openSections.gz?year=2018&term=7&campus=NB");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            int[] courseIndexes = Arrays.stream(StringUtils.substringsBetween(bulkData, "\"", "\"")).mapToInt(Integer::parseInt).toArray();
+            System.out.println(bulkData);
+            for (int x : watchArray) { //wlist = user courses we are sniping
+                if (bSearch(courseIndexes, x) == true) {
+                    System.out.println(x + " OPEN");
+                    System.err.println(w.getId());
+                    System.err.println(w.getAuto());
+                } else {
+                    System.out.println(x + " not open");
+                }
+            }
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Anything you insert after i will be discovered during next iterations
         }
-
-/*        for (int e: array) {
-            System.out.println(e);
-        }*/
-
-
-
 
 
     }
 
-    private static int[] grabWatchList() throws IOException {
-        int[] wlist = new int[5];
-        wlist[0] = 00003;
-        wlist[1] = 00005;
-        wlist[2] = 00006;
-        wlist[3] = 00007;
-        //above is e0xecuted at runtime and gets initial data from soc
-        return wlist;
+
+
 
     }
 
