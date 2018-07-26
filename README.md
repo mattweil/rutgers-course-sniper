@@ -12,4 +12,6 @@ Rutgers Course Sniper is a command line project written in Java that allows you 
 | `snipesections` | Begins watching the provided sections within a course | snipesections [sectionindex, sectionindex] | -a, -e
 | `snipecourse` | Begins watching all sections within a provided course  | snipecourse [courseindex] | -p, -e
 | `snipecourses` | Begins watching all sections within provided courses  | snipecourses [courseindex, courseindex] | -e
+| `login` | Login information for WebReg for auto-register use | login [netid] [password] | 
+| `refresh` | Allows for the configuration of sniper's refresh rate | refresh [time in seconds] | 
 | `help` | Displays a list of commands and their usage | help [command] | 
