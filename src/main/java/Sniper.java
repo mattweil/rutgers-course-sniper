@@ -1,6 +1,7 @@
 import api.Course;
 import api.Request;
 import api.WatchSection;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -46,11 +47,27 @@ public class Sniper implements Runnable {
         running = true;
 
         while (running == true) {
-        for (int i = 0; i < watchList.size(); i++) {
+
+            try {
+                Thread.sleep(Configuration.refreshRate);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println(watchList.size());
+
             int[] watchArray = new int[watchList.size()];
+
+
+        for (int i = 0; i < watchList.size(); i++) {
+
+
+            System.out.println("iteration: "+i);
+            //System.err.println(watchList.get(i).getId());
             WatchSection w = watchList.get(i);
-            System.out.println(i);
+            //System.out.println(i);
             watchArray[i] = Integer.parseInt(w.getId());
+            //System.err.println(i);
             String bulkData = null;
             try {
                 bulkData = Request.get("openSections.gz?year=2018&term=7&campus=NB");
@@ -58,23 +75,39 @@ public class Sniper implements Runnable {
                 e.printStackTrace();
             }
             int[] courseIndexes = Arrays.stream(StringUtils.substringsBetween(bulkData, "\"", "\"")).mapToInt(Integer::parseInt).toArray();
-            System.out.println(bulkData);
-            for (int x : watchArray) {
-                if (bSearch(courseIndexes, x) == true) {
-                    System.out.println(x + " OPEN");
+
+
+            int test = Integer.parseInt(w.getId());
+
+            if (bSearch(courseIndexes, test) == true) {
+                    //ArrayUtils.removeElement(watchArray, test);
+                    System.out.println(test + " == OPEN");
                     //ACTION TO BE TAKEN AFTER SECTION IS OPEN BELOW
                     System.err.println(w.getId());
                     System.err.println(w.getAuto());
-                } else {
+                    watchList.remove(i);
+            } else {
                     //ACTION TO BE TAKEN IF SECTION IS NOT OPEN
-                    System.out.println(x + " not open");
-                }
+                    System.out.println(test + " == not open");
             }
-            try {
-                Thread.sleep(Configuration.refreshRate);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+
+
+ //           System.out.println(bulkData);
+//            for (int x : watchArray) {
+//                System.err.println(x);
+//                if (bSearch(courseIndexes, x) == true) {
+//                    ArrayUtils.removeElement(watchArray, x);
+//                    System.out.println(x + " == OPEN");
+//                    //ACTION TO BE TAKEN AFTER SECTION IS OPEN BELOW
+//                    System.err.println(w.getId());
+//                    System.err.println(w.getAuto());
+//                } else {
+//                    //ACTION TO BE TAKEN IF SECTION IS NOT OPEN
+//                    System.out.println(x + " == not open");
+//                }
+//            }
+
 
             // Anything you insert after i will be discovered during next iterations
         }
@@ -95,11 +128,11 @@ public class Sniper implements Runnable {
         int x = item;
         int result = ob.binarySearch(arr, x);
         if (result == -1) {
-            System.out.println("Element not present");
+            //System.out.println("Element not present");
             return false;
         }
         else {
-            System.out.println("Element found at " + "index " + result);
+            //System.out.println("Element found at " + "index " + result);
             return true;
         }
 
