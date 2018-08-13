@@ -27,46 +27,9 @@ public class Launch {
         String command = input.readLine().toLowerCase();
         //System.err.println(command);
 
-        if (command.startsWith("snipesection ")) {
-            String id;
-            Boolean auto;
-            if (command.contains("-a")){
-                id = StringUtils.substringBetween(command, "snipesection ", " -");
-                auto = true;
-            } else {
-                auto = false;
-                id = StringUtils.substringAfter(command,"snipesection ");
-            }
-            Commands.snipesection(id, auto);
-        }
 
-        else if (command.startsWith("snipesections ")) {
-            ArrayList<String> idlist = new ArrayList<>();
-            String ids[] = StringUtils.substringsBetween(command," ", ",");
-            for (String id: ids) {
-                idlist.add(id);
-            }
-            idlist.add(StringUtils.substringAfterLast(command,", "));
-            //System.out.println(id);
-            Commands.snipesections(idlist, false);
-            System.out.println("Number of active threads from the given thread: " + Thread.activeCount());
-            waitForCommand();
-        }
 
-        else if (command.startsWith("snipecourse ")) {
-            String id;
-            id = StringUtils.substringAfter(command,"snipecourse ");
-            //System.out.println(id);
-            Commands.snipecourse(id);
-            waitForCommand();
-        }
-
-        else if (command.startsWith("list")) {
-            Commands.list();
-            waitForCommand();
-        }
-
-        else if (command.startsWith("help")) {
+        if (command.startsWith("help")) {
             //Commands.sendHelp();
             waitForCommand();
 

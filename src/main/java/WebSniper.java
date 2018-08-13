@@ -160,7 +160,7 @@ public class WebSniper implements Runnable {
 
 
                 try {
-                    Request.post(jsonString, "https://mattweil.net/projects/rusnipe/local");
+                    Request.post(jsonString, "");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
