@@ -1,0 +1,9 @@
+<application>
+  <component name="ParameterNameHintsSettings">
+    <blacklists>
+      <blacklist language="Java">
+        <added pattern="com.mashape.unirest.request.GetRequest.header(name,value)" />
+      </blacklist>
+    </blacklists>
+  </component>
+</application>
